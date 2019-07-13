@@ -17,22 +17,23 @@ var corsOptions = {
       database:"Project_vacation"
   });
 
-  module.exports.checkLogOn=(name,password)=>{
+
+  module.exports.checkLogin=(name,password)=>{
     return new Promise(function(resolve,reject){
      
     con.query(`SELECT * FROM users WHERE mail='${name}' AND password=${password}`, function(err,result,fields){
         if (err) throw err;
-
+    
         resolve(result);
        
     });
   });
 }
 
-module.exports.saveChooseVac=(id)=>{
+module.exports.deleteFavouriteVacations=(id,user_id)=>{
   return new Promise(function(resolve,reject){
    
-  con.query(`INSERT INTO favorite_vacation (user_id,vacation_id) VALUES ('2',${id})`, function(err,result,fields){
+  con.query(` Delete FROM favorite_vacation WHERE  user_id=${user_id} AND vacation_id=${id}`, function(err,result,fields){
       if (err) throw err;
 
       resolve(result);
@@ -41,14 +42,60 @@ module.exports.saveChooseVac=(id)=>{
 });
 }
 
-module.exports.getAllVac=()=>{
+module.exports.addFavouriteVacations=(id,user_id)=>{
+  return new Promise(function(resolve,reject){
+   
+  con.query(`INSERT INTO favorite_vacation (user_id,vacation_id) VALUES (${user_id},${id})`, function(err,result,fields){
+      if (err) throw err;
+
+      resolve(result);
+     
+  });
+});
+}
+
+module.exports.getAllVac=(currentUserId)=>{
     return new Promise(function(resolve,reject){
-    con.query(`SELECT * FROM vacation`, function(err,result,fields){
+    con.query(`SELECT vacation.id, vacation.title, vacation.location, vacation.image, vacation.start_date, vacation.end_date, vacation.price, favorite_vacation.user_id FROM vacation LEFT JOIN favorite_vacation ON vacation.id=favorite_vacation.vacation_id ORDER BY vacation.id`, async function(err,result,fields){
         if (err) throw err;
-        resolve(result);
+
+        let userVacations= await cleanUserVacations(result,currentUserId);
+        
+        resolve(userVacations);
     });
   });
 }
+
+cleanUserVacations=(result,currentUserId)=> {
+  let checkVacId=0;
+  let userVac=[];
+  for (let item of result) {
+    if (item.id!==checkVacId) {
+      checkVacId=item.id;
+      if (item.user_id==currentUserId) {
+        userVac.push(item);
+      } else {
+        item.user_id=null;
+        userVac.push(item);
+      }
+    } 
+  } return userVac
+} 
+
+module.exports.getAllVacAdmin=()=>{
+  return new Promise(function(resolve,reject){
+  con.query(`SELECT * FROM vacation`, async function(err,result,fields){
+      if (err) throw err;
+
+      resolve(result);
+  });
+});
+}
+
+
+
+
+
 
 
 module.exports.searchProd3=(id)=>{

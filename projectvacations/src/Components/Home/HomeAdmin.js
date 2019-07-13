@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Link, Switch,Redirect} from 'react-router-dom';
+import { Route, Link, Switch, Redirect} from 'react-router-dom';
 import axios from "axios";
 import { MDBFormInline, MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavbarToggler, MDBCollapse, MDBNavItem, MDBNavLink, MDBContainer, MDBMask, MDBView } from 'mdbreact';
 import { BrowserRouter as Router } from 'react-router-dom';
@@ -9,16 +9,16 @@ import './Home.css';
 import Login from '../Login/Login.js';
 import Header from '../Header/Header.js';
 import Footer from '../Footer/Footer.js';
-import Card from '../Card/Card';
+import CardAdmin from '../CardAdmin/CardAdmin';
 
-class Home extends Component {
+class HomeAdmin extends Component {
 
     state = {
       
-	  allVacations: [],
+      adminVacations: [],
 	  collapse: false,
 	  isWideEnough: false,
-    
+      nameUserAdmin:"",
 	};
 	
 	// constructor(props) {
@@ -37,51 +37,53 @@ class Home extends Component {
 		  collapse: !this.state.collapse,
 		});
 	  }
-	
-	  //Get all vacations
+    
+//Get all vacations for Admin
 
     componentDidMount=()=>{
-		let currUser = JSON.parse(localStorage.currentUser);
+		let currUser = JSON.parse(localStorage.currentUser); //get info about current admim from LS
 		console.log('currentUser: ',currUser);
-		let currentUserId=currUser.data[0].id;
-		console.log('currentUserId: ',currentUserId);
+        
+       // this.setState({ userNameAdmin: currUser.data.data[0].first_name }); //save name of current admin
+		
         var self=this;
-        axios.get(`http://localhost:5000/getAllVacation?currentUserId=${currentUserId}`)
+        axios.get(`http://localhost:5000/getAllVacationAdmin`)
         .then(function(response){
-		 
-		// console.log(this.state.allVacations);
-	
+		
          console.log(response.data);
          
-		 self.setState({ allVacations: response.data });
-		// console.log(this.state.allVacations);
-
+		 self.setState({ adminVacations: response.data });
+		
         })
         .catch(function(error){
            console.log(error);
         });
       } 
-      
-      printCards=()=>{
-		let printArray  = [];
-		console.log(this.state.allVacations);
-        for(let item of this.state.allVacations)
-        {
-            console.log(item);
-            printArray.push(<Card key={item.id} data={item}/>)
-      
-		}
-		console.log('printArray',printArray);
-        return printArray;
-      }
-    
 
+      
+// print all vacations
+
+      printCardsAdm=()=>{
+        let printArrayAdm  = [];
+		console.log(this.state.adminVacations);
+        for(let item of this.state.adminVacations)
+        { 
+            printArrayAdm.push(<CardAdmin key={item.id} data={item}/>)   
+		}
+        console.log('printArray: ',printArrayAdm);
+        return printArrayAdm;
+      }
+
+// add new vacation
+
+// update vacation
+   
+      
   render() {
     return (
 	
 		<div>
 		  <header>
-		   
 			  <MDBNavbar color="bg-primary" fixed="top" dark expand="md" scrolling transparent>
 				<MDBNavbarBrand href="/">
 				  <strong>Menu</strong>
@@ -115,11 +117,11 @@ class Home extends Component {
 			<MDBView src="https://mdbootstrap.com/img/Photos/Others/img%20(40).jpg" fixed="top">
 			  <MDBMask overlay="purple-light" className="flex-center flex-column text-white text-center">
 				<h2>OUR VACATIONS</h2>
-				<div className="container">
-					<div className="row">
-						{this.printCards()}
-					</div>
-		        </div>
+
+                    <div className="row">
+                        {this.printCardsAdm()}
+                    </div>    
+		       
 				{/* <Router> */}
 				{/* <Switch> */}
 				  {/* <Route path="/" exact component={Jumbotron} />
@@ -146,7 +148,7 @@ class Home extends Component {
 		  </main>
 
 		  <div className="row">
-           <button type="button"><Link to="/Login">Back to Login</Link></button>
+           <Link to="/Login">Back to Login</Link>
            <Route path="/Login" exact component={Login} />
            </div>
    
@@ -156,4 +158,4 @@ class Home extends Component {
   }
 }
     
-export default Home;
+export default HomeAdmin;

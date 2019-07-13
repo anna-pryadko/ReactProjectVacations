@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Link, Switch,Redirect} from 'react-router-dom';
+import { Route, Link, Switch, Redirect} from 'react-router-dom';
 import axios from "axios";
 import { MDBFormInline, MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavbarToggler, MDBCollapse, MDBNavItem, MDBNavLink, MDBContainer, MDBMask, MDBView } from 'mdbreact';
 import { BrowserRouter as Router } from 'react-router-dom';
@@ -11,11 +11,14 @@ import Header from '../Header/Header.js';
 import Footer from '../Footer/Footer.js';
 import Card from '../Card/Card';
 
-class Home extends Component {
+class HomeUser extends Component {
 
     state = {
-      
-	  allVacations: [],
+
+      currentUserHome: {},
+      userNameHome:"",  
+
+      currentUserVacations: [],
 	  collapse: false,
 	  isWideEnough: false,
     
@@ -41,7 +44,10 @@ class Home extends Component {
 	  //Get all vacations
 
     componentDidMount=()=>{
-		let currUser = JSON.parse(localStorage.currentUser);
+        let currUser = JSON.parse(localStorage.currentUser);
+        this.setState({ currentUserHome: currUser });
+        this.setState({ userNameHome: currUser.data[0].first_name });
+
 		console.log('currentUser: ',currUser);
 		let currentUserId=currUser.data[0].id;
 		console.log('currentUserId: ',currentUserId);
@@ -53,7 +59,7 @@ class Home extends Component {
 	
          console.log(response.data);
          
-		 self.setState({ allVacations: response.data });
+		 self.setState({ currentUserVacations: response.data });
 		// console.log(this.state.allVacations);
 
         })
@@ -62,19 +68,50 @@ class Home extends Component {
         });
       } 
       
-      printCards=()=>{
-		let printArray  = [];
-		console.log(this.state.allVacations);
-        for(let item of this.state.allVacations)
+      printCardsfavourite=()=>{
+        let printArrayfavourite  = [];
+		console.log(this.state.currentUserVacations);
+        for(let item of this.state.currentUserVacations)
         {
-            console.log(item);
-            printArray.push(<Card key={item.id} data={item}/>)
-      
+            if (item.user_id!==null) {
+            printArrayfavourite.push(<Card key={item.id} data={item}/>)
+            
+            }
 		}
-		console.log('printArray',printArray);
+        console.log('printArrayfavourite: ',printArrayfavourite);
+        return printArrayfavourite;
+      }
+
+      printCards=()=>{
+        let printArray  = [];
+		console.log(this.state.currentUserVacations);
+        for(let item of this.state.currentUserVacations)
+        {
+            if (item.user_id==null) {
+            printArray.push(<Card key={item.id} data={item}/>)
+            
+            }
+		}
+        console.log('printArray: ',printArray);
         return printArray;
       }
-    
+   
+      LinkLogOut= () => {
+        localStorage.removeItem('currentUser');
+        var self=this;
+        axios.get(`http://localhost:5000/Logout`,{withCredentials:true})
+        .then(function(response){
+          
+          console.log(response.data);
+           
+        // self.setState({ isLogin: response.data });
+        })
+        .catch(function(error){
+           console.log(error);
+        });
+        }
+
+      
 
   render() {
     return (
@@ -115,11 +152,19 @@ class Home extends Component {
 			<MDBView src="https://mdbootstrap.com/img/Photos/Others/img%20(40).jpg" fixed="top">
 			  <MDBMask overlay="purple-light" className="flex-center flex-column text-white text-center">
 				<h2>OUR VACATIONS</h2>
-				<div className="container">
+
+                <h3>Yours favourite vacations:</h3>
+				
 					<div className="row">
-						{this.printCards()}
+						{this.printCardsfavourite()}
 					</div>
-		        </div>
+
+                <h3>Others vacations:</h3>
+				
+                    <div className="row">
+                        {this.printCards()}
+                    </div>    
+		       
 				{/* <Router> */}
 				{/* <Switch> */}
 				  {/* <Route path="/" exact component={Jumbotron} />
@@ -146,7 +191,7 @@ class Home extends Component {
 		  </main>
 
 		  <div className="row">
-           <button type="button"><Link to="/Login">Back to Login</Link></button>
+           <a type="button" onClick={() =>this.LinkLogOut()}><Link to="/Login">LogOut</Link></a>
            <Route path="/Login" exact component={Login} />
            </div>
    
@@ -156,4 +201,4 @@ class Home extends Component {
   }
 }
     
-export default Home;
+export default HomeUser;

@@ -3,8 +3,10 @@ import axios from "axios";
 //import Registration from './MyReg';
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn, MDBCard, MDBCardBody,MDBModalFooter } from 'mdbreact';
 import { BrowserRouter } from 'react-router-dom'
-import { Route, Link, Switch,} from 'react-router-dom';
+import { Route, Link, Switch, Redirect} from 'react-router-dom';
 
+import Registration from '../Registration/Registration';
+import HomeUser from '../Home/HomeUser';
 
 // import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 // import AppBar from 'material-ui/AppBar';
@@ -12,122 +14,151 @@ import { Route, Link, Switch,} from 'react-router-dom';
 // import TextField from 'material-ui/TextField';
 
 class Login extends Component {
-  state = {
-    username:"",
+
+  constructor(props, context) {
+    super(props, context);
+
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+
+  state={
+    userName:"",
     password:"",
-  
-    isLoginSuccess:"",
 
     errorName:"",
     errorPassword:"",
-  };
 
-  _isFormValid() {
-    return this._isNameValid(this.state.username) && this._isPassValid(this.state.password)
-  }
+    currentUser:{},
+    isLoginSuccess:"",
 
-  _isNameValid(username) {
-    let isValid=true;
-    let errorName='';
+    foundUsers:[],
+    isLoggedIn: false,
+    isAdmin:false,
 
-    if (username==='') {
-      errorName='Name is empty!';
-      isValid=false;
-      this.setState({errorName:errorName});
-      return isValid;
-    } 
+    checkCookie:"",
+    cookieArr:[],
+   }
 
-    if (username.length < 3) {
-      errorName='Name must have 3 symbols minimum!';
-      isValid=false;
-      this.setState({errorName:errorName});
-      return isValid;
-    } 
-  }
-
-  _isPassValid(password) {
-    let isValid=true;
-    let errorPassword='';
-
-    if (password==='') {
-      errorPassword='Password is empty!';
-      isValid=false;
-      this.setState({errorName:errorPassword});
-      return isValid;
-    } 
-  }
-
-  // changeName(username) {
-  //   this.setState({username:username});
-  //   console.log(this.state.username)
-  // }
-
-  // changePassword(password) {
-  //   this.setState({password:password});
-  //   console.log(this.state.password)
-  // }
-  
-
-  // handleClick(event){
-  //   var apiBaseUrl = "http://localhost:4000/api/";
-  //   var self = this;
-  //   var payload={
-  //   "email":this.state.username,
-  //   "password":this.state.password
-  //   }
-  //   axios.post(apiBaseUrl+'login', payload)
-  //   .then(function (response) {
-  //   console.log(response);
-  //   if(response.data.code == 200){
-  //   console.log("Login successfull");
-  //   var uploadScreen=[];
-  //   uploadScreen.push(<UploadScreen appContext={self.props.appContext}/>)
-  //   self.props.appContext.setState({loginPage:[],uploadScreen:uploadScreen})
-  //   }
-  //   else if(response.data.code == 204){
-  //   console.log("Username password do not match");
-  //   alert("username password do not match")
-  //   }
-  //   else{
-  //   console.log("Username does not exists");
-  //   alert("Username does not exist");
-  //   }
-  //   })
-  //   .catch(function (error) {
-  //   console.log(error);
-  //   });
-  //   }
-  
-  sendLogin= (event) => {
-    event.preventDefault();
-    console.log(this.state.username,this.state.password)
-    // if (!this._isFormValid()) return;
-
-    // console.log("handleClick");
-    // let username=this.state.username;
-    // let password=this.state.password;
-       
-    // var self=this;
-    // axios.get(`http://localhost:4000/login?name=${username}&password=${password}`)
-    // .then(function(response){
-      
-    //   console.log("Login: ",response.data);
-      
-    //  self.setState({ isLoginSuccess: response.data });
-
-    //  console.log("isLoginSuccess:", this.state.isLoginSuccess);
-    // })
-    // .catch(function(error){
-    //    console.log(error);
-    // });
-    }
-
+    //  componentDidMount=()=>{
+    //   {   
+    //     var self=this;
+    //     axios.get(`http://localhost:4000/checkLogin?name=${name}&password=${password}`,{withCredentials:true})
+    //     .then(function(response){
+          
+    //       console.log('isLoggedIn',response.data);
+          
+    //      self.setState({ isLoggedIn: response.data });
+    //     })
+    //     .catch(function(error){
+    //        console.log(error);
+    //     });
     
+    //     }
+    //    }
 
+//Validation userName and password
+
+_isFormValid() {
+  return this._isNameValid(this.state.username) && this._isPassValid(this.state.password)
+}
+
+_isNameValid(username) {
+  let isValid=true;
+  let errorName='';
+
+  if (username==='') {
+    errorName='Name is empty!';
+    isValid=false;
+    this.setState({errorName:errorName});
+    return isValid;
+  } 
+
+  if (username.length < 3) {
+    errorName='Name must have 3 symbols minimum!';
+    isValid=false;
+    this.setState({errorName:errorName});
+    return isValid;
+  } 
+}
+
+_isPassValid(password) {
+  let isValid=true;
+  let errorPassword='';
+
+  if (password==='') {
+    errorPassword='Password is empty!';
+    isValid=false;
+    this.setState({errorName:errorPassword});
+    return isValid;
+  } 
+}
+      
+// Check Login  
+
+handleClick=()=>{ 
+    console.log('checkLogin')
+    let isValud=this._isFormValid();
+        if (isValud==true) {
+          console.log('Valid')
+          let password=this.state.password;
+          let userName=this.state.userName; 
+          var self=this;
+          axios.get(`http://localhost:5000/checkLogin?name=${userName}&password=${password}`,{withCredentials:true})
+          .then(function(response){
+            
+          console.log('currentUser',response.data);
+            
+          self.setState({ currentUser: response.data });
+
+          this.setLogin();  
+          })
+          .catch(function(error){
+            console.log(error);
+          });
+        } 
+        else {
+          if (this.state.errorName) {alert(this.state.errorName);}
+          if (this.state.errorPassword) {alert(this.state.errorPassword);}
+         }
+
+      } 
+
+    setLogin=()=>{       
+        let localUser = this.state.currentUser;
+
+          if(localUser!=={}){  
+            localStorage.currentUser=JSON.stringify(localUser); //save user to localstorage 
+            this.setState({isLoggedIn:true})    
+            
+            if (localUser.role=="1")
+                 {
+                  this.setState({isAdmin: true});
+                  console.log("isAdmin",this.state.isAdmin)    
+                 } 
+                 else 
+                   {
+                     this.setState({isAdmin: false});
+                     console.log("isAdmin",this.state.isAdmin)
+                   }          
+                  }  
+                  else {
+                    alert('Name or password incorrect!')
+                  } 
+                 }
+                 
     render() {
+
+      if (this.state.isLoggedIn == true && this.state.isAdmin ==true){ 
+        return  <Redirect to="/HomeUser"/>
+       }
+      //  if (this.state.isLoggedIn == true && this.state.isAdmin ==false){   // redirect to Admin/User
+      //   return  <Redirect to="/Home"/>
+      //  }
+
         return (
           <BrowserRouter>
-          <div>
+          
             <MDBContainer>
               <MDBRow>
                 <MDBCol md="6">
@@ -160,14 +191,15 @@ class Login extends Component {
                           />
                         </div>
                         <div className="text-center py-4 mt-3">
-                          <MDBBtn color="cyan" type="submit" onClick={this.sendLogin}>
+                          <MDBBtn color="cyan" type="submit" onClick={() =>this.handleClick()}>
                             LOGIN
                           </MDBBtn>
                         </div>
                       </form>
                       <MDBModalFooter>
                 <div className="font-weight-light">
-                  {/* <p>Not a member? <Link to="/registration">Sign Up</Link></p> */}
+                  <p>Not a member? <Link to="/Registration">Sign Up</Link></p>
+                  
                   {/* <p>Forgot Password?</p> */}
                 </div>
                
@@ -178,8 +210,10 @@ class Login extends Component {
               </MDBRow>
             
             </MDBContainer>
-            {/* <Route path="/registration" exact component={Registration} /> */}
-            </div>
+            
+          
+            <Route path="/Registration" exact component={Registration} />
+            <Route path="/HomeUser" exact component={HomeUser} />
             </BrowserRouter>
           );
         };

@@ -1,28 +1,35 @@
 import React, { Component } from 'react';
-//import logo from './logo.svg';
+import {BrowserRouter} from 'react-router-dom';
+import { Route, Link, Switch,Redirect} from 'react-router-dom';
+
 import './App.css';
-import {connect} from 'react-redux'
 
-import getvacations from './actions/getvacations';
-
-import Home from './Components/Home/Home.js';
 import Main from './Components/Main/Main.js';
-//import Login from './Components/Login/MyLogin.js';
+import Jumbotron from './Components/Jumbotron/Jumbotron.js';
+import HomeUser from './Components/Home/HomeUser.js';
+import HomeAdmin from './Components/Home/HomeAdmin.js';
+import ModalLogin from './Components/ModalLogin/ModalLogin';
+import Registration from './Components/Registration/Registration.js';
 
 class App  extends Component {
   render() {
-    console.log('this.props.testStore',this.props.testStore)
+    
     return (
-      <Home></Home>
+      <BrowserRouter>
+       
+        <Switch>
+                <Route path="/" exact component={Main} />
+                <Route path="/Jumbotron" exact component={Jumbotron} />
+                <Route path="/HomeUser" exact component={HomeUser} />
+                <Route path="/HomeAdmin" exact component={HomeAdmin} />
+                <Route path="/Login" exact component={ModalLogin} />
+                <Route path="/Registration" exact component={Registration} />
+        </Switch>
+       
+      </BrowserRouter>
+      
     )
   }
 }
-
-// ({onGetVacations})=> {
-
-//   const getvacations=()=>{
-//     onGetVacations();
-//   }
-
 
  export default App;
