@@ -66,8 +66,10 @@ class HomeAdmin extends Component {
       printCardsAdm=()=>{
         let printArrayAdm  = [];
 		console.log(this.state.adminVacations);
-        for(let item of this.state.adminVacations)
+		for(let item of this.state.adminVacations)
         { 
+			item.start_date=item.start_date.substring(0,10) //this function cut the date to normal without zone time
+            item.end_date=item.end_date.substring(0,10)
             printArrayAdm.push(<CardAdmin key={item.id} data={item}/>)   
 		}
         console.log('printArray: ',printArrayAdm);

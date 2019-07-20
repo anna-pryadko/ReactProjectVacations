@@ -58,16 +58,16 @@ class Main extends Component {
    console.log("LOGGWD", loggedIn)
    console.log("userRole", this.state.userRole)
 
-    if (loggedIn == true && this.state.userRole =='1'){ 
+    if (loggedIn == true && this.state.userRole =='0'){ 
       return  <Redirect to="/HomeAdmin"/>
      }
      
-     if (loggedIn == true && this.state.userRole =='0'){   // redirect to Admin/User
+     if (loggedIn == true && this.state.userRole =='1'){   // redirect to Admin/User
       return  <Redirect to="/HomeUser"/>
      }
     
      if (loggedIn == false){   // redirect to Login/Registration
-      return  <Redirect to="/Jumbotron"/>
+      return  <Redirect to="/Login"/>
      }
     
     return (
@@ -124,7 +124,7 @@ class Main extends Component {
 
         <main>
           <MDBContainer className="text-center my-5">
-            <p align="justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            {/* <p align="justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p> */}
           </MDBContainer>
         </main>
 

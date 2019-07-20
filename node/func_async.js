@@ -56,30 +56,42 @@ module.exports.addFavouriteVacations=(id,user_id)=>{
 
 module.exports.getAllVac=(currentUserId)=>{
     return new Promise(function(resolve,reject){
-    con.query(`SELECT vacation.id, vacation.title, vacation.location, vacation.image, vacation.start_date, vacation.end_date, vacation.price, favorite_vacation.user_id FROM vacation LEFT JOIN favorite_vacation ON vacation.id=favorite_vacation.vacation_id ORDER BY vacation.id`, async function(err,result,fields){
+    con.query(`SELECT vacation.id, vacation.title, vacation.location, vacation.image, vacation.start_date, vacation.end_date, vacation.price, favorite_vacation.user_id AS status FROM vacation LEFT JOIN favorite_vacation ON vacation.id=favorite_vacation.vacation_id ORDER BY vacation.id`, async function(err,result,fields){
         if (err) throw err;
 
-        let userVacations= await cleanUserVacations(result,currentUserId);
+        let userVacations= await sortUserVacations(result,currentUserId);
         
         resolve(userVacations);
     });
   });
 }
 
-cleanUserVacations=(result,currentUserId)=> {
-  let checkVacId=0;
+sortUserVacations=(result,currentUserId)=> {
+  
   let userVac=[];
+  let userVacUnFav=[];
+
   for (let item of result) {
-    if (item.id!==checkVacId) {
-      checkVacId=item.id;
-      if (item.user_id==currentUserId) {
+      if (item.status==currentUserId) {
         userVac.push(item);
       } else {
-        item.user_id=null;
-        userVac.push(item);
-      }
+        item.status=null;
+        userVacUnFav.push(item);   
     } 
-  } return userVac
+  } 
+  console.log(userVac);
+  console.log(userVacUnFav);
+
+  for (let item of userVacUnFav) {
+    if ((userVac.find(x => x.id === item.id))==undefined)
+    {
+      userVac.push(item);
+    }
+  }
+  
+  console.log(userVac);
+  
+  return userVac
 } 
 
 module.exports.getAllVacAdmin=()=>{
@@ -91,6 +103,7 @@ module.exports.getAllVacAdmin=()=>{
   });
 });
 }
+
 
 
 

@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import axios from "axios";
 //import Registration from './MyReg';
-import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn, MDBCard, MDBCardBody,MDBModalFooter } from 'mdbreact';
+import { MDBMask, MDBView,MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn, MDBCard, MDBCardBody,MDBModalFooter } from 'mdbreact';
 import { BrowserRouter } from 'react-router-dom'
 import { Route, Link, Switch, Redirect} from 'react-router-dom';
 
 import Registration from '../Registration/Registration';
-import HomeUser from '../Home/HomeUser';
+// import HomeUser from '../Home/HomeUser';
+// import HomeAdmin from '../Home/HomeAdmin';
 
 // import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 // import AppBar from 'material-ui/AppBar';
@@ -34,11 +35,41 @@ class Login extends Component {
 
     foundUsers:[],
     isLoggedIn: false,
-    isAdmin:false,
+    // isAdmin:false,
+
+    cookieArr:[],
 
     checkCookie:"",
-    cookieArr:[],
+    userRole:"",
+    
+    currentUser:{},
    }
+
+   componentDidMount=()=>{
+        
+    if (localStorage.currentUser) {
+      let currUser = JSON.parse(localStorage.currentUser) 
+      this.setState({ currentUser: currUser });
+      this.setState({ userRole: currUser.data[0].role });
+      
+ }
+
+    var self=this;
+    axios.get(`http://localhost:5000/checkCookie`,{withCredentials:true})
+    .then(function(response){
+      
+     console.log('checkCookie',response.data); // 1 or 0
+    
+     self.setState({ checkCookie: response.data });
+
+    })
+    .catch(function(error){
+       console.log("Error",error);
+    });
+    console.log(this.state.checkCookie);
+
+  }
+  
 
     //  componentDidMount=()=>{
     //   {   
@@ -149,16 +180,39 @@ handleClick=()=>{
                  
     render() {
 
-      if (this.state.isLoggedIn == true && this.state.isAdmin ==true){ 
-        return  <Redirect to="/HomeUser"/>
-       }
+      // if (this.state.isLoggedIn == true && this.state.isAdmin ==true){ 
+      //   return  <Redirect to="/HomeUser"/>
+      //  }
       //  if (this.state.isLoggedIn == true && this.state.isAdmin ==false){   // redirect to Admin/User
       //   return  <Redirect to="/Home"/>
       //  }
 
+
+      console.log("checkCookie", this.state.checkCookie)
+
+      let loggedIn = this.state.checkCookie === '1'
+   
+      console.log("LOGGWD", loggedIn)
+      console.log("userRole", this.state.userRole)
+   
+       if (loggedIn == true && this.state.userRole =='0'){ 
+         return  <Redirect to="/HomeAdmin"/>
+        }
+        
+        if (loggedIn == true && this.state.userRole =='1'){   // redirect to Admin/User
+         return  <Redirect to="/HomeUser"/>
+        }
+       
+        if (loggedIn == false){   // redirect to Login/Registration
+         return  <Redirect to="/Login"/>
+        }
+       
+
         return (
           <BrowserRouter>
-          
+            {/* <MDBView src="https://mdbootstrap.com/img/Photos/Others/img%20(40).jpg" fixed="top">
+            <MDBMask overlay="purple-light" className="flex-center flex-column text-white text-center">
+              */}
             <MDBContainer>
               <MDBRow>
                 <MDBCol md="6">
@@ -210,10 +264,12 @@ handleClick=()=>{
               </MDBRow>
             
             </MDBContainer>
+            {/* </MDBMask>
+          </MDBView> */}
             
           
             <Route path="/Registration" exact component={Registration} />
-            <Route path="/HomeUser" exact component={HomeUser} />
+            
             </BrowserRouter>
           );
         };

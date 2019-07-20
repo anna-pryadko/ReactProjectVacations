@@ -4,7 +4,7 @@ import axios from "axios";
 import { MDBFormInline, MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavbarToggler, MDBCollapse, MDBNavItem, MDBNavLink, MDBContainer, MDBMask, MDBView } from 'mdbreact';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import './Home.css';
+// import './Home.css';
 
 import Login from '../Login/Login.js';
 import Header from '../Header/Header.js';
@@ -73,7 +73,9 @@ class HomeUser extends Component {
 		console.log(this.state.currentUserVacations);
         for(let item of this.state.currentUserVacations)
         {
-            if (item.user_id!==null) {
+			item.start_date=item.start_date.substring(0,10) //this function cut the date to normal without zone time
+            item.end_date=item.end_date.substring(0,10)
+            if (item.status!==null) {
             printArrayfavourite.push(<Card key={item.id} data={item}/>)
             
             }
@@ -87,7 +89,7 @@ class HomeUser extends Component {
 		console.log(this.state.currentUserVacations);
         for(let item of this.state.currentUserVacations)
         {
-            if (item.user_id==null) {
+            if (item.status==null) {
             printArray.push(<Card key={item.id} data={item}/>)
             
             }
@@ -184,11 +186,10 @@ class HomeUser extends Component {
 			
 		  </header>
   
-		  <main>
+		  {/* <main>
 			<MDBContainer className="text-center my-5">
-			  <p align="justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 			</MDBContainer>
-		  </main>
+		  </main> */}
 
 		  <div className="row">
            <a type="button" onClick={() =>this.LinkLogOut()}><Link to="/Login">LogOut</Link></a>

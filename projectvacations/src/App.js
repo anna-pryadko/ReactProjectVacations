@@ -5,9 +5,9 @@ import { Route, Link, Switch,Redirect} from 'react-router-dom';
 import './App.css';
 
 import Main from './Components/Main/Main.js';
-import Jumbotron from './Components/Jumbotron/Jumbotron.js';
 import HomeUser from './Components/Home/HomeUser.js';
 import HomeAdmin from './Components/Home/HomeAdmin.js';
+//import Login from './Components/Login/Login';
 import ModalLogin from './Components/ModalLogin/ModalLogin';
 import Registration from './Components/Registration/Registration.js';
 
@@ -19,7 +19,7 @@ class App  extends Component {
        
         <Switch>
                 <Route path="/" exact component={Main} />
-                <Route path="/Jumbotron" exact component={Jumbotron} />
+                {/* <Route path="/Jumbotron" exact component={Jumbotron} /> */}
                 <Route path="/HomeUser" exact component={HomeUser} />
                 <Route path="/HomeAdmin" exact component={HomeAdmin} />
                 <Route path="/Login" exact component={ModalLogin} />

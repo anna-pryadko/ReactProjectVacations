@@ -1,9 +1,11 @@
 import React, { Component }  from 'react';
 import { Route, Link, Switch,Redirect} from 'react-router-dom';
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBCard, MDBCardBody, MDBIcon } from 'mdbreact';
+import {Container, Col, Form,FormGroup, Label, Input,Button,} from 'reactstrap';
+import {MDBMask, MDBView } from 'mdbreact';
+import { AvField } from 'availity-reactstrap-validation';
 import axios from "axios";
 
-import Home from '../Home/Home';
+import './Login.css';
 
 //import './Card.css';
 // import ToggleButton from 'react-bootstrap/ToggleButton'
@@ -32,7 +34,6 @@ class ModalLogin extends Component {
       
 
 handleClick=()=>{ 
-    
           
           let password=this.state.password;
           let userName=this.state.userName; 
@@ -47,14 +48,12 @@ handleClick=()=>{
           let curUs=response.data;
           self.setState({ isLoggedIn: true });  
           localStorage.currentUser=JSON.stringify(curUs);
-        //   this.setLogin();  
+        //   this.setUserP();  
           })
           .catch(function(error){
             console.log(error);
           });
          
-        
-
       } 
 
 render() {
@@ -62,57 +61,53 @@ render() {
     console.log("props : " , this.props)
     
     return (
-     
-<MDBContainer>
-      <MDBRow>
-        <MDBCol md="6">
-          <MDBCard>
-            <MDBCardBody>
-              <form>
-                <p className="h4 text-center py-4">Subscribe</p>
-                <label
-                  htmlFor="defaultFormCardNameEx"
-                  className="grey-text font-weight-light"
-                >
-                  Your name (email)
-                </label>
-                <input
-                  type="email"
-                  id="defaultFormCardNameEx"
-                  className="form-control"
-                  onChange = {(event,target) => this.setState({userName:event.target.value})}
-                  value={this.state.userName}
-                />
-                <br />
-                <label
-                  htmlFor="defaultFormCardEmailEx"
-                  className="grey-text font-weight-light"
-                >
-                  Your password
-                </label>
-                <input
-                  type="password"
-                  id="defaultFormCardEmailEx"
-                  className="form-control"
-                  onChange = {(event,target) => this.setState({password:event.target.value})}
-                  value={this.state.password}
-                />
-                <div className="text-center py-4 mt-3">
-                  <MDBBtn className="btn btn-outline-purple" type="submit" onClick={() =>this.handleClick()}>
-                    Login
-                    <MDBIcon far icon="paper-plane" className="ml-2" />
-                  </MDBBtn>
-                </div>
-              </form>
-            </MDBCardBody>
-          </MDBCard>
-        </MDBCol>
-      </MDBRow>
-     
-    </MDBContainer>
-  
- 
-       
+
+   
+      <div className="Main">                  
+              <Container className="App">
+                 <div className="row">
+                 <div className="loginBox col-md-4">
+                   <h2 className="mb-2">LOGIN</h2>
+                   <Form className="form">
+                     <Col>
+                       <FormGroup>
+                       <Label className="lableBox" for="userName">Enter user name (email)</Label>
+                         <input
+                           type="text"
+                           name="userName"
+                           id="userName"
+                           placeholder="Enter user name (mail)"
+                           onChange = {(event,target) => this.setState({userName:event.target.value})}
+                           value={this.state.userName}
+                         />
+                       </FormGroup>
+                     </Col>
+                     <Col>
+                       <FormGroup>
+                         <Label for="Password">Password</Label>
+                         <input
+                           type="password"
+                           name="password"
+                           id="examplePassword"
+                           placeholder="****"
+                           onChange = {(event,target) => this.setState({password:event.target.value})}
+                           value={this.state.password}
+                         />
+                       </FormGroup>
+                     </Col>
+              <button type="submit" className="offset-5" onClick={() =>this.handleClick()}>login</button>
+              <button type="button" className="btn btn-primary offset-1 " ><Link to="/Regester">Regester Now</Link></button> 
+                   </Form>
+                   </div>
+                   </div>
+                 </Container>
+                 {/* <Route path="/Regester" exact component={Regester} />
+                 <Route path="/HomeUser" exact component={HomeUser} />
+                 <Route path="/HomeAdmin" exact component={HomeAdmin} /> */}
+                 {/* <Route path="/" exact component={Login_Project} /> */}
+                 </div>  
+                
+
     );
 }
 }
