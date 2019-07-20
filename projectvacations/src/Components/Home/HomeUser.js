@@ -192,7 +192,7 @@ class HomeUser extends Component {
 		  </main> */}
 
 		  <div className="row">
-           <a type="button" onClick={() =>this.LinkLogOut()}><Link to="/Login">LogOut</Link></a>
+           <a type="button" onClick={() =>this.LinkLogOut()}><Link to="/Logout">LogOut</Link></a>
            <Route path="/Login" exact component={Login} />
            </div>
    

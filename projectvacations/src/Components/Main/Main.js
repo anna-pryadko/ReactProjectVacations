@@ -29,7 +29,7 @@ class Main extends Component {
         if (localStorage.currentUser) {
           let currUser = JSON.parse(localStorage.currentUser) 
           this.setState({ currentUser: currUser });
-          this.setState({ userRole: currUser.data[0].role });
+          this.setState({ userRole: currUser.role });
           
      }
 

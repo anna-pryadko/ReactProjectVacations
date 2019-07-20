@@ -54,6 +54,7 @@ app.get('/checkLogin',async (req,res)=>{
 })
 
 app.get('/Logout', function (req, res) {
+  
   res.clearCookie("currentUser", "1");
 
 let ans = "Log out";
