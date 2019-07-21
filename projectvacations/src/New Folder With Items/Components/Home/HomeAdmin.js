@@ -10,25 +10,42 @@ import Login from '../Login/Login.js';
 import Header from '../Header/Header.js';
 import Footer from '../Footer/Footer.js';
 import CardAdmin from '../CardAdmin/CardAdmin';
-import Menu from '../Menu/Menu';
 
 class HomeAdmin extends Component {
 
     state = {
       
-	  adminVacations: [],
-	  
-	  currentAdminName:"",
-	  
+      adminVacations: [],
+	  collapse: false,
+	  isWideEnough: false,
+      nameUserAdmin:"",
 	};
 	
+	// constructor(props) {
+	// 	super(props);
+	// 	this.state = {
+	// 	  collapse: false,
+	// 	  isWideEnough: false,
+	// 	  allVacation:[],
+	// 	};
+	// 	this.onClick = this.onClick.bind(this);
+		
+	//   }
+	
+	  onClick() {
+		this.setState({
+		  collapse: !this.state.collapse,
+		});
+	  }
     
 //Get all vacations for Admin
 
     componentDidMount=()=>{
-		let currUser = JSON.parse(localStorage.currentUserName); //get info about current admim from LS
-		this.setState({currentAdminName:currUser});
-			
+		let currUser = JSON.parse(localStorage.currentUser); //get info about current admim from LS
+		console.log('currentUser: ',currUser);
+        
+       // this.setState({ userNameAdmin: currUser.data.data[0].first_name }); //save name of current admin
+		
         var self=this;
         axios.get(`http://localhost:5000/getAllVacationAdmin`)
         .then(function(response){
@@ -66,13 +83,41 @@ class HomeAdmin extends Component {
       
   render() {
     return (
-	<div>
-		<div className="menuAdm">
-		<Menu name={this.state.currentAdminName}></Menu>
-		</div>
-	<div className="container">
-		
-				<h1>OUR VACATIONS</h1>
+	
+		<div>
+		  <header>
+			  <MDBNavbar color="bg-primary" fixed="top" dark expand="md" scrolling transparent>
+				<MDBNavbarBrand href="/">
+				  <strong>Menu</strong>
+				</MDBNavbarBrand>
+				{!this.state.isWideEnough && <MDBNavbarToggler onClick={this.onClick} />}
+				<MDBCollapse isOpen={this.state.collapse} navbar>
+				  <MDBNavbarNav left>
+					<MDBNavItem active>
+					  <MDBNavLink to="#">Home</MDBNavLink>
+					</MDBNavItem>
+					<MDBNavItem>
+					  <MDBNavLink to="#">About</MDBNavLink>
+					</MDBNavItem>
+					<MDBNavItem>
+					  <MDBNavLink to="#">Profile</MDBNavLink>
+					</MDBNavItem>
+				  </MDBNavbarNav>
+				  <MDBNavbarNav right>
+			  <MDBNavItem>
+				<MDBFormInline waves>
+				  <div className="md-form my-0">
+					<input className="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" />
+				  </div>
+				</MDBFormInline>
+			  </MDBNavItem>
+			</MDBNavbarNav>
+				</MDBCollapse>
+			  </MDBNavbar>
+
+			<MDBView src="https://99px.ru/sstorage/53/2016/06/tmb_168378_7165.jpg" fixed="top">
+			  <MDBMask className="flex-center flex-column text-white text-center">
+				<h2>OUR VACATIONS</h2>
 
                     <div className="row">
                         {this.printCardsAdm()}
@@ -92,7 +137,10 @@ class HomeAdmin extends Component {
 				{/* <h5>It will always stay visible on the top, even when you scroll down</h5>
 				<p>Navbar's background will switch from transparent to solid color while scrolling down</p><br />
 				<p>Full page intro with background image will be always displayed in full screen mode, regardless of device </p> */}
+			  </MDBMask>
+			</MDBView>
 			
+		  </header>
   
 
 		  <div className="row">
@@ -101,7 +149,7 @@ class HomeAdmin extends Component {
            </div>
    
 		</div>
-		</div>
+  
     );
   }
 }

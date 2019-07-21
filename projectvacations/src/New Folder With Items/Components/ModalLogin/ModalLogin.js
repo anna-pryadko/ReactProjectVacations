@@ -20,11 +20,10 @@ class ModalLogin extends Component {
     
         currentUser:"",
         currentRole:"",
-        //currentUserName:"",
-        // isLoginSuccess:"",
+        isLoginSuccess:"",
     
         loggedIn:"",
-       
+    
        }  
 
 handleClick=()=>{ 
@@ -37,11 +36,21 @@ handleClick=()=>{
           .then(function(response){
             
           console.log('currentUser',response.data);
+            
+          self.setState({ currentUser: response.data});
+          self.setState({currentRole: response.data[0].role})
 
-          self.setState({currentUser: response.data}); 
-
-          self.setUserAccess();
-           
+          if(response.data!=={}){  
+            localStorage.currentUser=JSON.stringify(response.data); //save user to localstorage 
+            self.setState({loggedIn:true})  
+          } 
+          else {
+            alert('Name or password incorrect!')
+          } 
+         // let curUs=response.data;
+         // self.setState({ isLoggedIn: true });  
+          //localStorage.currentUser=JSON.stringify(curUs);
+          // this.setUserAccess();  
           })
           .catch(function(error){
             console.log(error);
@@ -49,26 +58,28 @@ handleClick=()=>{
          
       } 
 
-      setUserAccess=()=>{      
+      // setUserAccess=()=>{       
+      //   let localUser = this.state.currentUser;
 
-      let localUser = this.state.currentUser;
-
-      if(localUser!=={}){  
-        localStorage.currentUser=JSON.stringify(localUser); //save user to localstorage 
-        localStorage.currentUserName=JSON.stringify(localUser[0].first_name)
-        localStorage.currentUserId=JSON.stringify(localUser[0].id)
-
-        this.setState({loggedIn:true}) 
-        
-        this.setState({currentRole: localUser[0].role})
-
-        console.log("localUser[0].role",localUser[0].role)
-        
-      } 
-      else {
-        alert('Name or password incorrect!')
-      } 
-    }
+      //     if(localUser!=={}){  
+      //       localStorage.currentUser=JSON.stringify(localUser); //save user to localstorage 
+      //       this.setState({isLoggedIn:true})    
+            
+            // if (localUser.role=="1")
+            //      {
+            //       this.setState({isAdmin: true});
+            //       console.log("isAdmin",this.state.isAdmin)    
+            //      } 
+            //      else 
+            //        {
+            //          this.setState({isAdmin: false});
+            //          console.log("isAdmin",this.state.isAdmin)
+            //        }          
+                  // }  
+                  // else {
+                  //   alert('Name or password incorrect!')
+                  // } 
+                //  }
 
 render() {
     
@@ -79,18 +90,16 @@ render() {
 
     console.log("currentUser : " , this.state.currentUser);
 
-    //console.log("currentRole : " , this.state.currentUser[0].role);
+    console.log("currentRole : " , this.state.currentRole);
 
-   if (this.state.currentUser!=="") {
-    console.log("currentRole : " , this.state.currentUser[0].role);
-    if (this.state.loggedIn == true && this.state.currentUser[0].role ==1){ 
+
+    if (this.state.loggedIn == true && this.state.currentRole ==1){ 
       return  <Redirect to="/HomeAdmin"/>
      }
      
-     if (this.state.loggedIn == true && this.state.currentUser[0].role){   // redirect to Admin/User
+     if (this.state.loggedIn == true && this.state.currentRole ==0){   // redirect to Admin/User
       return  <Redirect to="/HomeUser"/>
      }
-    }
     
     //  if (this.state.loggedIn == false){   // redirect to Login/Registration
     //   return  <Redirect to="/Login"/>
@@ -115,10 +124,10 @@ render() {
                            onChange = {(event,target) => this.setState({userName:event.target.value})}
                            value={this.state.userName}
                            errorMessage="Invalid name" validate={{
-                           required: {value: true}
-                          //  pattern: {value: '^[A-Za-z0-9]+$'},
-                          //  minLength: {value: 6},
-                          //  maxLength: {value: 16}
+                           required: {value: true},
+                           pattern: {value: '^[A-Za-z0-9]+$'},
+                           minLength: {value: 6},
+                           maxLength: {value: 16}
 }} 
                          />
                        </FormGroup>

@@ -15,7 +15,7 @@ class CardAdmin extends Component {
 state={
 
     //checkOn:"" , 
-   // idVacAdm:"",
+    idVacAdm:"",
    // user_id:""
 }    
 
@@ -27,7 +27,7 @@ componentDidMount(){
     // this.setState({ user_id : currentUserIdCard })
 
     //this.setState({ checkOn : this.props.user_id }) //user_id or null
-    //this.setState({ idVacAdm : this.props.id })
+    this.setState({ idVacAdm : this.props.id })
     
 }
 
@@ -44,20 +44,20 @@ render() {
         <h5 className='card-title'>{this.props.data.title}</h5>
         <p className='card-text'>Price: {this.props.data.price}$</p>
         <div className="row">
-          <div className="col-6">
-            <div>From: {this.props.data.start_date}</div>
-          </div>
-          <div className="col-6">
-             <div>   to: {this.props.data.start_date}</div>
-           </div>
+        <div className="col-md-2">
+        <p>From: {this.props.data.start_date}</p>
+        </div>
+        <div className="col-md-2 offset-1">
+        <p>   to: {this.props.data.start_date}</p>
+        </div>
         </div>
         <div className="row">
-           <div className="col-md-1 offset-6">
-             <ButtonUpd idVac={this.props.data.id} onClick={() =>this.handleClick()}/>
-           </div>
-           <div className="col-md-1 offset-1">
-             <ButtonDel idVac={this.props.data.id} onClick={() =>this.handleClick()}/>
-            </div>
+        <div className="col-md-1 offset-6">
+        <ButtonUpd idVac={this.props.data.id} onClick={() =>this.handleClick()}/>
+        </div>
+        <div className="col-md-1 offset-6">
+        <ButtonDel idVac={this.props.data.id} onClick={() =>this.handleClick()}/>
+        </div>
         </div>
         </div>
         </div> 
