@@ -12,8 +12,6 @@ import HomeAdmin from '../Home/HomeAdmin';
 import ModalLogin from '../ModalLogin/ModalLogin';
 
 
-//import reducer from '../../reducers';
-
 class Main extends Component {
     state = {
 
@@ -25,14 +23,7 @@ class Main extends Component {
     };
 
       componentDidMount=()=>{
-        
-        if (localStorage.currentUser) {
-          let currUser = JSON.parse(localStorage.currentUser) 
-
-          this.setState({ currentUser: currUser });
-          this.setState({ userRole: currUser.role });
-          
-     }
+   
 
         var self=this;
         axios.get(`http://localhost:5000/checkCookie`,{withCredentials:true})
@@ -52,25 +43,26 @@ class Main extends Component {
       
   render() {
 
-  console.log("checkCookie", this.state.checkCookie)
+   if (localStorage.currentUser&&this.state.checkCookie!=="") {
+    let currUser = JSON.parse(localStorage.currentUser) 
 
-   let loggedIn = this.state.checkCookie === '1'
 
-   console.log("LOGGWD", loggedIn)
-   console.log("userRole", this.state.userRole)
+    console.log("currUser",currUser)
 
-    if (loggedIn == true && this.state.userRole =='0'){ 
+
+    if (this.state.checkCookie == '1' && currUser[0].role =='1'){ 
       return  <Redirect to="/HomeAdmin"/>
      }
      
-     if (loggedIn == true && this.state.userRole =='1'){   // redirect to Admin/User
+     if (this.state.checkCookie == '1' && currUser[0].role =='0'){   // redirect to Admin/User
       return  <Redirect to="/HomeUser"/>
      }
     
-     if (loggedIn == false){   // redirect to Login/Registration
+     else {   // redirect to Login/Registration
       return  <Redirect to="/Login"/>
      }
-    
+   }
+
     return (
       <div>
 

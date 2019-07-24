@@ -66,42 +66,20 @@ class HomeAdmin extends Component {
       
   render() {
     return (
-	<div>
-		<div className="menuAdm">
+<div>
+	<div className="menuAdm">
 		<Menu name={this.state.currentAdminName}></Menu>
-		</div>
+	</div>
 	<div className="container">
 		
-				<h1>OUR VACATIONS</h1>
+		<h1>OUR VACATIONS</h1>
 
-                    <div className="row">
-                        {this.printCardsAdm()}
-                    </div>    
-		       
-				{/* <Router> */}
-				{/* <Switch> */}
-				  {/* <Route path="/" exact component={Jumbotron} />
-				  <Route path="/Home" exact component={Home} />
-				  <Route path="/Login" exact component={ModalLogin} />
-				  <Route path="/Registration" exact component={Registration} /> */}
-				  
-				  {/* <Route path="/HomeAdmin" exact component={HomeAdmin} />
-				  <Route path="/HomeUser" exact component={HomeUser} /> */}
-				{/* </Switch> */}
-				{/* </Router> */}
-				{/* <h5>It will always stay visible on the top, even when you scroll down</h5>
-				<p>Navbar's background will switch from transparent to solid color while scrolling down</p><br />
-				<p>Full page intro with background image will be always displayed in full screen mode, regardless of device </p> */}
-			
-  
-
-		  <div className="row">
-           <Link to="/Login">Back to Login</Link>
-           <Route path="/Login" exact component={Login} />
-           </div>
-   
-		</div>
-		</div>
+        <div className="row">
+			{this.printCardsAdm()}
+        </div>    
+		      
+	</div>
+</div>
     );
   }
 }

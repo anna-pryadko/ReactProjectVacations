@@ -44,12 +44,10 @@ render() {
         <h5 className='card-title'>{this.props.data.title}</h5>
         <p className='card-text'>Price: {this.props.data.price}$</p>
         <div className="row">
-          <div className="col-6">
-            <div>From: {this.props.data.start_date}</div>
-          </div>
-          <div className="col-6">
-             <div>   to: {this.props.data.start_date}</div>
-           </div>
+          
+            <div>From: {this.props.data.start_date}  </div>
+            <div>   to: {this.props.data.start_date}</div>
+           
         </div>
         <div className="row">
            <div className="col-md-1 offset-6">

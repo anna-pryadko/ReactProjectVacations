@@ -13,7 +13,7 @@ import {
   DropdownMenu,
   DropdownItem } from 'reactstrap';
 
-import './Menu.css';  
+//import './Menu.css';  
 
 export default class Menu extends React.Component {
   constructor(props) {
@@ -47,13 +47,16 @@ export default class Menu extends React.Component {
   render() {
     return (
   
-        <Navbar  className="mainMenu" light expand="md">
+        <Navbar  className="mainMenu" sticky-top color="light" light expand="md">
           <NavbarBrand>Hello, {this.props.name}</NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <NavItem>
-                <NavLink href="/components/">Components</NavLink>
+                <NavLink href="/Charts">Charts</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink href="/AddVacation">Add Vacation</NavLink>
               </NavItem>
               <NavItem>
                 <NavLink href="/Login" onClick={() =>this.LogOut()}>LogOut</NavLink>

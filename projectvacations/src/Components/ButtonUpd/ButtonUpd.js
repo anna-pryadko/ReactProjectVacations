@@ -71,8 +71,8 @@ render() {
     console.log("props : " , this.props)
     
     return (
-     <div>
-        <i className="far fa-edit" onClick={() =>this.handleClick()}></i>
+     <div class="button">
+        <button type="button" className="startBtn" onClick={() =>this.handleClick()}>Update</button>
      </div>
             ); 
 }
