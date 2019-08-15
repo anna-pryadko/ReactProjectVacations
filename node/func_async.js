@@ -30,10 +30,34 @@ var corsOptions = {
   });
 }
 
+module.exports.checkRegName=(name)=>{
+  return new Promise(function(resolve,reject){
+   
+  con.query(`SELECT * FROM users WHERE mail='${name}'`, function(err,result,fields){
+      if (err) throw err;
+  
+      resolve(result);
+     
+  });
+});
+}
+
+module.exports.registration=(firstName,lastName,name,password)=>{
+  return new Promise(function(resolve,reject){
+   
+  con.query(`INSERT INTO users (first_name,last_name,mail,password,role) VALUES ('${firstName}','${lastName}','${name}','${password}','0')`, function(err,result,fields){
+      if (err) throw err;
+
+      resolve(result);
+     
+  });
+});
+}
+
 module.exports.deleteFavouriteVacations=(id,user_id)=>{
   return new Promise(function(resolve,reject){
    
-  con.query(` Delete FROM favorite_vacation WHERE  user_id=${user_id} AND vacation_id=${id}`, function(err,result,fields){
+  con.query(`Delete FROM favorite_vacation WHERE  user_id='${user_id}' AND vacation_id='${id}'`, function(err,result,fields){
       if (err) throw err;
 
       resolve(result);
@@ -45,7 +69,7 @@ module.exports.deleteFavouriteVacations=(id,user_id)=>{
 module.exports.addFavouriteVacations=(id,user_id)=>{
   return new Promise(function(resolve,reject){
    
-  con.query(`INSERT INTO favorite_vacation (user_id,vacation_id) VALUES (${user_id},${id})`, function(err,result,fields){
+  con.query(`INSERT INTO favorite_vacation (user_id,vacation_id) VALUES ('${user_id}','${id}')`, function(err,result,fields){
       if (err) throw err;
 
       resolve(result);
@@ -55,13 +79,13 @@ module.exports.addFavouriteVacations=(id,user_id)=>{
 }
 
 module.exports.getAllVac=(currentUserId)=>{
-    return new Promise(function(resolve,reject){
-    con.query(`SELECT vacation.id, vacation.title, vacation.location, vacation.image, vacation.start_date, vacation.end_date, vacation.price, favorite_vacation.user_id AS status FROM vacation LEFT JOIN favorite_vacation ON vacation.id=favorite_vacation.vacation_id ORDER BY vacation.id`, async function(err,result,fields){
-        if (err) throw err;
+  return new Promise(function(resolve,reject){
+  con.query(`SELECT vacation.id, vacation.title, vacation.location, vacation.image, vacation.start_date, vacation.end_date, vacation.price, favorite_vacation.user_id AS status FROM vacation LEFT JOIN favorite_vacation ON vacation.id=favorite_vacation.vacation_id ORDER BY vacation.id`, async function(err,result,fields){
+      if (err) throw err;
 
-        let userVacations= await sortUserVacations(result,currentUserId);
+      let userVacations= await sortUserVacations(result,currentUserId);
         
-        resolve(userVacations);
+      resolve(userVacations);
     });
   });
 }
@@ -73,9 +97,10 @@ sortUserVacations=(result,currentUserId)=> {
 
   for (let item of result) {
       if (item.status==currentUserId) {
+        item.status=1;
         userVac.push(item);
       } else {
-        item.status=null;
+        item.status=0;
         userVacUnFav.push(item);   
     } 
   } 
@@ -104,99 +129,53 @@ module.exports.getAllVacAdmin=()=>{
 });
 }
 
-
-
-
-
-
-
-
-module.exports.searchProd3=(id)=>{
-    return new Promise(function(resolve,reject){
-
-    con.query(`SELECT * FROM Products WHERE Id=${id}`, function(err,result,fields){
-        if (err) throw err;
-        resolve(result);
-    });
-  });
-}
-
-module.exports.searchProd4=()=>{
+module.exports.addVacation=(image,nameVac,location,dateFrom,dateTo,price)=>{
   return new Promise(function(resolve,reject){
-  con.query(`SELECT * FROM orders`, async function(err,result,fields){
+   
+  con.query(`INSERT INTO vacation (title,location,image,start_date,end_date,price) VALUES ('${nameVac}','${location}','${image}','${dateFrom}','${dateTo}','${price}')`, function(err,result,fields){
       if (err) throw err;
-      for (let item of result){
-        let prN= await getNameProduct(item);
 
-        item.Name=prN[0].name;
-
-        console.log(item);  
-       
-      }
-    
       resolve(result);
+     
   });
 });
 }
 
-getNameProduct=(item)=>{
+module.exports.deleteVacation=(idVac)=>{
   return new Promise(function(resolve,reject){
-  con.query(`SELECT * FROM products WHERE index=${item.Product_id}`, function(err,result1,fields){
+   
+  con.query(`DELETE FROM vacation WHERE id='${idVac}'`, function(err,result,fields){
       if (err) throw err;
-      
-      resolve(result1);
+
+      resolve(result);
+     
   });
 });
 }
 
-//Вложенный селект
-
-module.exports.getOrder=()=>
-{
+module.exports.updateVacation=(idVac,image,nameVac,location,dateFrom,dateTo,price)=>{
   return new Promise(function(resolve,reject){
-    con.query(`SELECT orders.id AS OrderId, customers.Name AS CustomerName, products.name AS ProductName FROM products JOIN orders ON products.index=)`, function(err,result1,fields){
-        if (err) throw err;
-        
-        resolve(result1);
-    });
+   
+  con.query(`UPDATE vacation SET title='${nameVac}',location='${location}',image='${image}',start_date='${dateFrom}',end_date='${dateTo}',price='${price}' WHERE id='${idVac}'`, function(err,result,fields){
+      if (err) throw err;
+
+      resolve(result);
+     
   });
+});
 }
 
-module.exports.getShop=()=>
-{
+
+module.exports.getAllUsersVacations=()=>{
   return new Promise(function(resolve,reject){
-    con.query(`SELECT orders.id AS OrderId, customers.Name AS CustomerName, products.name AS ProductName FROM products JOIN orders ON products.index=)`, function(err,result1,fields){
-        if (err) throw err;
-        
-        resolve(result1);
-    });
-  });
+  let UserVactionsSelect=`SELECT favorite_vacation.user_id, vacation.title FROM favorite_vacation LEFT JOIN vacation ON favorite_vacation.vacation_id=vacation.id`;
+  con.query(UserVactionsSelect,function(err,result,fields){
+      if (err) throw err;
+
+      resolve(result);
+    })
+})
 }
 
 
-module.exports.insProd=()=>{
-    return new Promise(function(resolve,reject){
-    con.query(`INSERT INTO Products (Name,Description,SubCategoryId,Price,CategoryId) VALUES ('Hat Hat','Hat',1,80,1)`, function(err,result,fields){
-        if (err) throw err;
-        resolve(result);
-    });
-  });
-}
 
-module.exports.delProd=()=>{
-    return new Promise(function(resolve,reject){
-    con.query(`DELETE FROM Products WHERE Id=8`, function(err,result,fields){
-        if (err) throw err;
-        resolve(result);
-    });
-  });
-}
-
-module.exports.updProd=()=>{
-    return new Promise(function(resolve,reject){
-    con.query(`UPDATE Products SET Price=600, WHERE Id=7`, function(err,result,fields){
-        if (err) throw err;
-        resolve(result);
-    });
-  });
-}

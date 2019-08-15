@@ -1,6 +1,11 @@
-.loginBox errorMessage {
-    text-align: left;
+.col {
     
+    height: 80px;
+}
+
+.lableBox {
+    margin-bottom: 0px;;
+    margin-top: 0px;
 }
 
 p {
@@ -9,38 +14,39 @@ p {
 
 h2 {
     text-align: center;
-    padding-bottom: 30px;
+    margin-top: 15px;
     font-family: 'Chewy', cursive;
 }
 
-.loginBox{
+.addBox {
     text-align: left;
-    width:310px;
-    height: 450px;
-    margin-top: 10%;
-    padding: 40px;
+    /* width:50%; */
+    height:650px;
+   
+   
     position: absolute;
-    top: 25%; 
-    left: 50%;
-     transform: translate(-50%,-50%);
+    top:10%;
+    left: 35%;
+     /* transform: translate(-50%,-50%); */
      /* text-align: center; */
     
     
         border: 1px solid rgb(153, 153, 153);
         border-radius: 20px;
         box-shadow: 10 10px 12px -1px black;
-        background-color: #f1f1f127;
+        background-color: rgba(255, 255, 255, 0.2);
+       /* background-color: #f1f1f127;
         /* box-shadow: .8px .9px 3px black;  */
         transition:  box-shadow .5s ease-out;
      
     }
 
-    .loginBox:hover{
-        box-shadow: 40px 40px 60px black; 
+    .addBox:hover{
+        box-shadow: 20px 20px 30px black; 
         transition:  box-shadow .4s ease-in;
     }
     
-    .loginBox input[type="email"], .loginBox input[type="password"]{
+    .addBox input {
        border:0;
        background: rgba(255, 255, 255, 0.5);
        display: block;
@@ -57,21 +63,21 @@ h2 {
        font-weight: 500;
     }
 
-    .loginBox input[type="email"]:hover, .loginBox input[type="password"]:hover{ 
+    .addBox input:hover{ 
         border-color:darkblue;
         background: white;
         color: black;
      }
     
-    .loginBox button[type="submit"]{
+    .but{
         /* padding: 14px 40px; */
         background: #2ecc71;
         display: block;
-        margin: 20px auto;
+        margin: 10px auto;
         text-align: center;
         border: 2px solid #2ecc71; 
         outline: none;
-        width: 100px;
+        width: 120px;
         height: 40px;
         color: white;
         text-align: center;
@@ -81,16 +87,16 @@ h2 {
         cursor: pointer;
      }
 
-     .loginBox button[type="submit"]:hover{
+     .but:hover{
         border:0;
         /* padding: 14px 40px; */
-        background: #1c8d4b;
+        background-color: #1c8d4b;
         display: block;
-        margin: 20px auto;
+        margin: 10px auto;
         text-align: center;
         border: 2px solid #1c8d4b; 
         outline: none;
-        width: 110px;
+        width: 130px;
         height: 40px;
         color: white;
         border-radius: 5px;
@@ -99,29 +105,11 @@ h2 {
         cursor: pointer;
      }
     
-    
-    /* body{
-       
-        font-family:sans-serif;
-        background: url('https://99px.ru/sstorage/53/2016/06/tmb_168378_7165.jpg') top center;
-        
-        -webkit-background-size: cover;
-        -moz-background-size: cover;
-        -o-background-size: cover;
-        background-size: cover;
-       
-        background-repeat: no-repeat;
-        overflow: auto;
-    } */
-    
     .Main{
         font-family:  Tahoma, sans-serif;
-        color: white;
+        color:darkblue;
 
         }
-        placeholder{
-            color: white;
-            font-size: 10px;
-        }
+
     
     

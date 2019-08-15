@@ -18,12 +18,14 @@ state={
 
 
 componentDidMount(){
-    let currUserCard = JSON.parse(localStorage.currentUser);
-    let currentUserIdCard=currUserCard.data[0].id;
-    this.setState({ user_id : currentUserIdCard })
+    let currIdUser = JSON.parse(localStorage.currentUserId); //get info about current admim from LS
+    this.setState({user_id:currIdUser});
+//     let currUserCard = JSON.parse(localStorage.currentUser);
+//     let currentUserIdCard=currUserCard.data[0].id;
+//     this.setState({ user_id : currentUserIdCard })
 
-    //this.setState({ checkOn : this.props.user_id }) //user_id or null
-    this.setState({ id : this.props.id })
+//     this.setState({ checkOn : this.props.user_id }) //user_id or null
+//     this.setState({ id : this.props.id })
     
 }
 
@@ -93,17 +95,14 @@ render() {
       <img className='card-img-top' src={this.props.data.image} alt='Card image cap'></img>
       <div className='card-body'>
       <h5 className='card-title'>{this.props.data.title}</h5>
+      <p className='card-text'>Location: {this.props.data.location}</p>
       <p className='card-text'>Price: {this.props.data.price}$</p>
+      <p className='card-text'>From: {this.props.data.start_date} to: {this.props.data.start_date}</p> 
       <div className="row">
-      <p>From: {this.props.data.start_date}</p>
-      <p>   to: {this.props.data.end_date}</p>
-      </div>
+      <div className="col-md-1 offset-10">
       <ButtonHeard id={this.props.data.id} user_id={this.state.user_id} checkOn={this.props.data.status}/>
-      
-      {/* <label htmlFor={this.props.id} className='switch'>
-      {this.checkToggle()}
-      <span className='slider round'></span>
-      </label> */}
+      </div>
+      </div>
       </div>
       </div> 
     ); 

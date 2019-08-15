@@ -53,6 +53,38 @@ app.get('/checkLogin',async (req,res)=>{
   console.log('ans for React checkLogin',ans);  
 })
 
+
+app.get('/registration',async (req,res)=>{
+  firstName=req.query.firstName;  
+  lastName=req.query.lastName;
+  name=req.query.name;  
+  password=req.query.password;
+  console.log(name,password,firstName,lastName); 
+  let ans1=await funAsync.checkRegName(name); 
+  console.log('ans1',ans1); 
+  if (ans1=="") {
+       
+       let ans2=await funAsync.registration(firstName,lastName,name,password);
+       console.log('ans2',ans2);         
+       if (ans2!=="") {
+          let ans=await funAsync.checkLogin(name,password);
+          res.cookie('currentUser', '1', { maxAge: 11900000000 });
+          console.log('ans',ans); 
+          res.send(ans);
+          console.log('ans for React registration',ans);  
+       }
+ }
+
+ else {
+   let ans=""; 
+   res.send(ans); 
+   console.log('ans for React registration',ans);  
+ } 
+  
+  
+})
+
+
 app.get('/Logout', function (req, res) {
   
   res.clearCookie("currentUser", "1");
@@ -79,9 +111,9 @@ app.get('/getAllVacationAdmin',async (req,res)=>{
 app.get('/updateFavouriteVacations',async (req,res)=>{
   id=req.query.id;  
   user_id=req.query.user_id;
-  status=req.query.status;
-  console.log(id,user_id,status);
-    if (status==0) {
+  updateFav=req.query.updateFav;
+  console.log(id,user_id,updateFav);
+    if (updateFav==0) {
       let ans=await funAsync.deleteFavouriteVacations(id,user_id);
        res.send(ans);
     } else {
@@ -90,99 +122,58 @@ app.get('/updateFavouriteVacations',async (req,res)=>{
     }
 })
 
-
-
-
-
-
-
-
-
-
-// app.get('/getAllUsers', async (req,res)=>{
-//   userName = req.query.userName;
-//   password = req.query.password;
-//   let DBVUsers = await funAsync.getAllUsers();  
-//   //console.log(' DB Users = ' ,DBVUsers)
-//    res.send(DBVUsers);
+app.get('/getVacationsForChart', async (req,res)=>{
   
-// }); 
-
-// app.get('/checkLogOn',async (req,res)=>{
-//   name=req.query.name;  
-//   password=req.query.password;
-//   let ans=await funAsync.checkLogOn(name,password);
-//   res.send(ans);
-//   console.log(ans);  
-// })
-
-app.get('/saveChooseVacation',async (req,res)=>{
-  id=req.query.id;  
-  let ans=await funAsync.saveChooseVac(id);
+  let ans = await funAsync.getAllUsersVacations();    
   res.send(ans);
-  console.log(ans);  
+});  
+
+app.get('/addVacation',async (req,res)=>{
+  image=req.query.image;  
+  nameVac=req.query.nameVac;
+  location=req.query.location;
+  dateFrom=req.query.dateFrom;
+  dateTo=req.query.dateTo;
+  price=req.query.price;
+  
+  let ans=await funAsync.addVacation(image,nameVac,location,dateFrom,dateTo,price);
+  
+  res.send(ans);
+  console.log('ans for React addVacation',ans);  
 })
 
-  app.get('/searchProductsByMin',async (req,res)=>{
-    let ans=await funAsync.searchProd2();
-    res.send(ans);
-    
-  })
-
-  app.get('/searchProductsById',async (req,res)=>{
-    let searchId=req.query.id  
-    let ans=await funAsync.searchProd3(searchId);
-    res.send(ans);
-    
-  })
-
-  app.get('/searchProductsByCustomer',async (req,res)=>{
-    //let searchId=req.query.id  
-    let ans=await funAsync.searchProd4();
-    res.send(ans);
-    
-  }) 
-
-app.get('/insertProduct',async (req,res)=>{
-    let ans=await funAsync.insProd();
-    res.send(ans);
-    
-}) 
-
-app.get('/deleteProduct',async (req,res)=>{
-    let ans=await funAsync.delProd();
-    res.send(ans);
-    
-}) 
-
-app.get('/updateProduct',async (req,res)=>{
-    let ans=await funAsync.updProd();
-    res.send(ans);
-    
-}) 
-
-// app.get('/getSubCategories',(req,res)=>{
-//   id=req.query.id;
-//   console.log("idCat: ",id);
-//   con.query(`SELECT * FROM Sub_Category WHERE CategoryId=${id}`, function(err,result,fields){
-//     if (err) throw err;
+app.get('/deleteVacation',async (req,res)=>{
+  idVac=req.query.idVac;  
   
-//     res.send(result);
-//     console.log(result);
-// });
-
-// })
-
-// app.get('/getProducts',(req,res)=>{
-//   id=req.query.id;
-//   console.log("idSubCat: ",id);
-//   con.query(`SELECT * FROM Products WHERE SubCategoryId=${id}`, function(err,result,fields){
-//     if (err) throw err;
+  let ans=await funAsync.deleteVacation(idVac);
   
-//     res.send(result);
-//     console.log(result);
-// });
+  res.send(ans);
+  console.log('ans for React deleteVacation',ans);  
+})
 
-// })
-
+app.get('/updateVacation',async (req,res)=>{
+  image=req.query.image;  
+  nameVac=req.query.nameVac;
+  location=req.query.location;
+  dateFrom=req.query.dateFrom;
+  dateTo=req.query.dateTo;
+  price=req.query.price;
+  idVac=req.query.idVac; 
+  
+  let ans=await funAsync.updateVacation(idVac,image,nameVac,location,dateFrom,dateTo,price);
+  
+  res.send(ans);
+ 
+})
 app.listen(5000);
+
+
+
+
+
+
+
+
+
+
+

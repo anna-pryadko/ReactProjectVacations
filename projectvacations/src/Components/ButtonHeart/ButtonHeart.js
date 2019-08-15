@@ -1,24 +1,21 @@
 import React, { Component }  from 'react';
-import { FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import { faEdit} from '@fortawesome/free-solid-svg-icons'
-import { MDBIcon } from "mdbreact";
-//import $ from "jquery";
+import {Redirect} from 'react-router-dom';
 
 import './ButtonHeart.css';
-// import ToggleButton from 'react-bootstrap/ToggleButton'
-// import {Card,Button} from 'react-bootstrap';
+
 import axios from "axios";
 
 class ButtonHeart extends Component {
     
 state={
     addClass:"",
+    checkChange:0,
     // addClass: false
     
 } 
 
 componentDidMount=()=>{
-     if (this.props.checkOn!==null) {
+     if (this.props.checkOn!==0) {
        this.setState({addClass:true}) 
     }
 }
@@ -26,23 +23,25 @@ componentDidMount=()=>{
 handleClick=()=>{
 
     this.setState({addClass: !this.state.addClass});
-    //this.changFavourite();
+    this.changFavourite();
+    window.location.reload();
+    //this.setState({checkChange:1}) 
 }
 
 changFavourite = () => {
    // event.preventDefault();
     
-    let status="";
+    let updateFav="";
     
     // add or del favourite Vacation
     if (this.state.addClass==false) {
-        status=0;
-    } else status=1;
+        updateFav=1;
+    } else updateFav=0;
     let id=this.props.id; 
     let user_id=this.props.user_id; 
-    console.log('changFavourite',status,id,user_id) 
+    console.log('changFavourite',updateFav,id,user_id) 
 
-    axios.get(`http://localhost:5000/updateFavouriteVacations?status=${status}&id=${id}&user_id=${user_id}`)
+    axios.get(`http://localhost:5000/updateFavouriteVacations?updateFav=${updateFav}&id=${id}&user_id=${user_id}`)
     .then(function(response){
       
       console.log(response.data);
@@ -57,9 +56,9 @@ changFavourite = () => {
 
 render() {
  
-    // if (this.props.checkOn!==null) {
-    //    this.setState({addClass:true}) 
-    // }
+    if (this.state.checkChange==1) {
+        return  <Redirect to="/HomeUser"/>
+    }
 
     let boxClass = ["fas fa-heart"];
     let boxClass2 = [""];

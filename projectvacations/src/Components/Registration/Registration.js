@@ -1,143 +1,198 @@
-import React, { Component } from 'react';
+import React, { Component }  from 'react';
+import { Route, Link, Switch,Redirect} from 'react-router-dom';
+import {Container, Col, Form,FormGroup, Label, Input,Button,} from 'reactstrap';
+import {MDBMask, MDBView } from 'mdbreact';
+import { AvForm, AvField } from 'availity-reactstrap-validation';
 import axios from "axios";
-import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn, MDBCard, MDBCardBody } from 'mdbreact';
 
+import './Registration.css';
 
-// import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-// import AppBar from 'material-ui/AppBar';
-// import RaisedButton from 'material-ui/RaisedButton';
-// import TextField from 'material-ui/TextField';
+import HomeAdmin from '../Home/HomeAdmin';
+import HomeUser from '../Home/HomeUser';
+import Registration from '../Registration/Registration';
 
-class Registration extends Component {
-  state = {
-    username:"",
-    password:"",
-  
-    // checkCookie:"",
-    isLogin:"",
-  };
-
-  // handleClick(event){
-  //   var apiBaseUrl = "http://localhost:4000/api/";
-  //   var self = this;
-  //   var payload={
-  //   "email":this.state.username,
-  //   "password":this.state.password
-  //   }
-  //   axios.post(apiBaseUrl+'login', payload)
-  //   .then(function (response) {
-  //   console.log(response);
-  //   if(response.data.code == 200){
-  //   console.log("Login successfull");
-  //   var uploadScreen=[];
-  //   uploadScreen.push(<UploadScreen appContext={self.props.appContext}/>)
-  //   self.props.appContext.setState({loginPage:[],uploadScreen:uploadScreen})
-  //   }
-  //   else if(response.data.code == 204){
-  //   console.log("Username password do not match");
-  //   alert("username password do not match")
-  //   }
-  //   else{
-  //   console.log("Username does not exists");
-  //   alert("Username does not exist");
-  //   }
-  //   })
-  //   .catch(function (error) {
-  //   console.log(error);
-  //   });
-  //   }
-  
-  handleClick= (event) => {
-    console.log("handleClick");
-    let username=this.state.username;
-    let password=this.state.password;
+class ModalLogin extends Component {
+    
+    state={
+        firstName:"",
+        lastName:"",
+        userName:"",
+        password:"",
+    
+        currentUser:"",
+        //currentRole:"",
+        //currentUserName:"",
+        // isLoginSuccess:"",
+    
+        loggedIn:"",
        
-    var self=this;
-    axios.get(`http://localhost:4000/login?name=${username}&password=${password}`)
-    .then(function(response){
-      
-      console.log("Login: ",response.data);
-      
-     self.setState({ isLogin: response.data });
+       }  
 
-     console.log("isLogin:", this.state.isLogin);
-    })
-    .catch(function(error){
-       console.log(error);
-    });
+handleClick=()=>{ 
+          
+          let firstName=this.state.firstName;
+          let lastName=this.state.lastName; 
+          let password=this.state.password;
+          let userName=this.state.userName; 
+      
+          console.log(password,userName);
+          var self=this;
+          axios.get(`http://localhost:5000/registration?firstName=${firstName}&lastName=${lastName}&name=${userName}&password=${password}`,{withCredentials:true})
+          .then(function(response){
+            
+          console.log('currentUser',response.data);
+
+          self.setState({currentUser: response.data}); 
+
+          self.setUserAccess();
+           
+          })
+          .catch(function(error){
+            console.log(error);
+          });
+         
+      } 
+
+      setUserAccess=()=>{      
+
+      let localUser = this.state.currentUser;
+
+      if(localUser!=={}){  
+        localStorage.currentUser=JSON.stringify(localUser); //save user to localstorage 
+        localStorage.currentUserName=JSON.stringify(localUser[0].first_name)
+        localStorage.currentUserId=JSON.stringify(localUser[0].id)
+
+        this.setState({loggedIn:true}) 
+        
+        // this.setState({currentRole: localUser[0].role})
+
+        // console.log("localUser[0].role",localUser[0].role)
+        
+      } 
+      else {
+        alert('Name already exist!')
+      } 
+    }
+
+render() {
+    
+    console.log("userName : " , this.state.userName);
+    console.log("password : " , this.state.password);
+
+    console.log("loggedIn : " , this.state.loggedIn);
+
+    console.log("currentUser : " , this.state.currentUser);
+
+    //console.log("currentRole : " , this.state.currentUser[0].role);
+
+   if (this.state.currentUser!=="") {
+   
+     if (this.state.loggedIn == true){   // redirect to Admin/User
+      return  <Redirect to="/HomeUser"/>
+     }
     }
     
-    // handleChange=(event,type)=> {
-    //   if (type === 0){
-    //     this.setState({name: event.target.value});
-    //     console.log("change",this.state.name)
-    //   }
-    //   if (type === 1) {
-    //     this.setState({password: event.target.value});
-    //     console.log("change",this.state.password)
-    //   }
-      
-    // }
-
-    render() {
-        return (
+    //  if (this.state.loggedIn == false){   // redirect to Login/Registration
+    //   return  <Redirect to="/Login"/>
+    //  }
         
-            <MDBContainer>
-              <MDBRow>
-                <MDBCol md="6">
-                  <MDBCard>
-                    <MDBCardBody>
-                      <form>
-                        <p className="h4 text-center py-4">Sign up</p>
-                        <div className="grey-text">
-                          <MDBInput
-                            label="Your name"
-                            icon="user"
-                            group
-                            type="text"
-                            validate
-                            error="wrong"
-                            success="right"
-                          />
-                          <MDBInput
-                            label="Your email"
-                            icon="envelope"
-                            group
-                            type="email"
-                            validate
-                            error="wrong"
-                            success="right"
-                          />
-                          <MDBInput
-                            label="Confirm your email"
-                            icon="exclamation-triangle"
-                            group
-                            type="text"
-                            validate
-                            error="wrong"
-                            success="right"
-                          />
-                          <MDBInput
-                            label="Your password"
-                            icon="lock"
-                            group
-                            type="password"
-                            validate
-                          />
-                        </div>
-                        <div className="text-center py-4 mt-3">
-                          <MDBBtn color="cyan" type="submit">
-                            Register
-                          </MDBBtn>
-                        </div>
-                      </form>
-                    </MDBCardBody>
-                  </MDBCard>
-                </MDBCol>
-              </MDBRow>
-            </MDBContainer>
-          );
-        };
-      }   
-  export default Registration;
-  
+    return (
+   
+      <div className="Main">                  
+              <Container className="App">
+                 <div className="row">
+                 <div className="loginBox col-md-4">
+                   <h2 className="mb-2">REGISTRATION</h2>
+                   <AvForm className="form">
+                   <Col>
+                       <FormGroup>
+                       <Label className="lableBox" for="firstName">Enter first name</Label>
+                         <AvField
+                           type="text"
+                           name="firstName"
+                           id="firstName"
+                           placeholder="Enter first name"
+                           onChange = {(event,target) => this.setState({firstName:event.target.value})}
+                           value={this.state.firstName}
+                           errorMessage="Invalid name" validate={{
+                           required: {value: true},
+                          pattern: {value: '^[A-Za-z]+$'},
+                          minLength: {value: 2},
+                          maxLength: {value: 10}
+}} 
+                         />
+                       </FormGroup>
+                     </Col>
+
+                     <Col>
+                       <FormGroup>
+                       <Label className="lableBox" for="lastName">Enter last name</Label>
+                         <AvField
+                           type="text"
+                           name="lastName"
+                           id="lastName"
+                           placeholder="Enter last name"
+                           onChange = {(event,target) => this.setState({lastName:event.target.value})}
+                           value={this.state.lastName}
+                           errorMessage="Invalid name" validate={{
+                           required: {value: true},
+                          pattern: {value: '^[A-Za-z]+$'},
+                          minLength: {value: 2},
+                          maxLength: {value: 10}
+}} 
+                         />
+                       </FormGroup>
+                     </Col>
+
+                     <Col>
+                       <FormGroup>
+                       <Label className="lableBox" for="userName">Enter user name (email)</Label>
+                         <AvField
+                           type="email"
+                           name="userName"
+                           id="userName"
+                           placeholder="Enter user name (email)"
+                           onChange = {(event,target) => this.setState({userName:event.target.value})}
+                           value={this.state.userName}
+                           errorMessage="Invalid name" validate={{
+                           required: {value: true}
+                          //  pattern: {value: '^[A-Za-z0-9]+$'},
+                          //  minLength: {value: 6},
+                          //  maxLength: {value: 16}
+}} 
+                         />
+                       </FormGroup>
+                     </Col>
+                     <Col>
+                       <FormGroup>
+                         <Label className="lableBox" for="Password">Password (6 symbols)</Label>
+                         <AvField
+                           type="password"
+                           name="password"
+                           id="password"
+                           placeholder="******"
+                           onChange = {(event,target) => this.setState({password:event.target.value})}
+                           value={this.state.password}
+                           errorMessage="Invalid password" validate={{
+                            required: {value: true},
+                            pattern: {value: '^[A-Za-z0-9]+$'},
+                            minLength: {value: 6},
+                            maxLength: {value: 6}
+          }} />
+                        
+                       </FormGroup>
+                     </Col>
+              <button type="submit" className="offset-5" onClick={() =>this.handleClick()}>Sing In</button>
+                
+                   </AvForm>
+                   </div>
+                   </div>
+                 </Container>
+                 
+                 </div>  
+              
+    );
+}
+}
+
+export default ModalLogin

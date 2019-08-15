@@ -57,10 +57,12 @@ class Main extends Component {
      if (this.state.checkCookie == '1' && currUser[0].role =='0'){   // redirect to Admin/User
       return  <Redirect to="/HomeUser"/>
      }
-    
-     else {   // redirect to Login/Registration
-      return  <Redirect to="/Login"/>
-     }
+
+   }
+
+   if (this.state.checkCookie == '0') {   // redirect to Login/Registration
+    console.log('login')
+    return  <Redirect to="/Login"/>
    }
 
     return (

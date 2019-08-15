@@ -52,12 +52,12 @@ export default class Menu extends React.Component {
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto">
-              <NavItem>
+              {/* <NavItem>
                 <NavLink className="linkMenu" href="/Charts">Charts</NavLink>
               </NavItem>
               <NavItem>
                 <NavLink className="linkMenu" href="/AddVacation">Add Vacation</NavLink>
-              </NavItem>
+              </NavItem> */}
               <NavItem>
                 <NavLink className="linkMenu" href="/" onClick={() =>this.LogOut()}>LogOut</NavLink>
               </NavItem>

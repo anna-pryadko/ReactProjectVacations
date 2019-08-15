@@ -4,7 +4,7 @@ import {  Route, Link } from 'react-router-dom';
 import axios from "axios";
 import { isNull } from 'util';
 
-class Chart_project extends Component {
+class Charts extends Component {
    constructor(props){
    super(props);
    this.state={
@@ -29,8 +29,8 @@ class Chart_project extends Component {
 
     
     for (let item of this.state.AllVacations){ //first For to sort all locations from users
-     allLocationsArr.push(item.location)  
-     followersArr.push(item.uId)            
+     allLocationsArr.push(item.title)  
+     followersArr.push(item.user_id)            
       }
     
       for (let item1 of allLocationsArr)  //second For to sort locations no duplicate for lables
@@ -100,8 +100,7 @@ class Chart_project extends Component {
     return (
     <div>
         <div style={{textAlign: "center" }}>
-    <button type="button" class="ml-4 mr-4 mt-2 btn btn-outline-success"><Link to="/" style={{color: "white"}}>Back to Login</Link></button>   
-    <button type="button" class="mt-2 btn btn-outline-success"><Link to="/HomeAdmin" style={{color: "white"}}>Back to Admin page</Link></button>
+        <button type="button" class="mt-2 btn btn-outline-success"><Link to="/HomeAdmin" style={{color: "white"}}>Back to Admin page</Link></button>
         </div>
         <div>
                <h1 style={{textAlign: "center" , color:"white"}} >Number of vacation followers</h1>
@@ -149,7 +148,7 @@ class Chart_project extends Component {
     )
   }
 }
-export default Chart_project;
+export default Charts;
 
 
     //   for (let item3 of followersArr)  //thired For to sort Users no duplicate for data in chart

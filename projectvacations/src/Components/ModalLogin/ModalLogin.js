@@ -87,7 +87,7 @@ render() {
       return  <Redirect to="/HomeAdmin"/>
      }
      
-     if (this.state.loggedIn == true && this.state.currentUser[0].role){   // redirect to Admin/User
+     if (this.state.loggedIn == true && this.state.currentUser[0].role==0){   // redirect to Admin/User
       return  <Redirect to="/HomeUser"/>
      }
     }
@@ -111,7 +111,7 @@ render() {
                            type="email"
                            name="userName"
                            id="userName"
-                           placeholder="Enter user name (mail)"
+                           placeholder="Enter user name (email)"
                            onChange = {(event,target) => this.setState({userName:event.target.value})}
                            value={this.state.userName}
                            errorMessage="Invalid name" validate={{
@@ -125,7 +125,7 @@ render() {
                      </Col>
                      <Col>
                        <FormGroup>
-                         <Label for="Password">Password</Label>
+                         <Label className="lableBox" for="Password">Password</Label>
                          <AvField
                            type="password"
                            name="password"

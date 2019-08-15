@@ -1,48 +1,40 @@
 import React, { Component }  from 'react';
-import { FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import { faEdit} from '@fortawesome/free-solid-svg-icons'
-import { MDBIcon } from "mdbreact";
-//import $ from "jquery";
+import Modal from 'react-awesome-modal';
 
 import './ButtonDel.css';
-// import ToggleButton from 'react-bootstrap/ToggleButton'
-// import {Card,Button} from 'react-bootstrap';
+
 import axios from "axios";
 
 class ButtonDel extends Component {
-    
-state={
-    addClass:"",
-    // addClass: false
-    
-} 
 
-componentDidMount=()=>{
-     if (this.props.checkOn!==null) {
-       this.setState({addClass:true}) 
+  constructor(props) {
+    super(props);
+    this.state = {
+        visible : false
     }
 }
 
-handleClick=()=>{
-
-    this.setState({addClass: !this.state.addClass});
-    //this.changFavourite();
+openModal() {
+    this.setState({
+        visible : true
+    });
 }
 
-changFavourite = () => {
-   // event.preventDefault();
-    
-    let status="";
-    
-    // add or del favourite Vacation
-    if (this.state.addClass==false) {
-        status=0;
-    } else status=1;
-    let id=this.props.id; 
-    let user_id=this.props.user_id; 
-    console.log('changFavourite',status,id,user_id) 
+closeModal() {
+    this.setState({
+        visible : false
+    });
+}
 
-    axios.get(`http://localhost:5000/updateFavouriteVacations?status=${status}&id=${id}&user_id=${user_id}`)
+
+handleClick = (idVac) => {
+   // event.preventDefault();
+
+    console.log("props : " , this.props)
+    console.log('idVac',idVac) 
+    this.closeModal();
+
+    axios.get(`http://localhost:5000/deleteVacation?idVac=${idVac}`)
     .then(function(response){
       
       console.log(response.data);
@@ -56,24 +48,53 @@ changFavourite = () => {
 
 
 render() {
- 
-    // if (this.props.checkOn!==null) {
-    //    this.setState({addClass:true}) 
-    // }
-
-    let boxClass = ["fas fa-heart"];
-    let boxClass2 = [""];
-    if(this.state.addClass) {
-      boxClass.push('press');
-      boxClass2.push('press');
- }
-    
+  
     console.log("props : " , this.props)
     
     return (
-     <div class="button">
-        <button type="button" className="startBtn" onClick={() =>this.handleClick()}>Delete</button>
-     </div>
+     <div>
+      
+       <i className="far fa-trash-alt" onClick={() => this.openModal()}></i>
+
+       <section>
+               
+                <Modal 
+                    visible={this.state.visible}
+                    width="420"
+                    height="300"
+                    effect="fadeInUp"
+                    onClickAway={() => this.closeModal()}
+                >
+                    <div className="container">
+                    <div className="row modalHeder">  
+                    <div className="col-10">
+                      <h3>Delete vacation</h3>
+                    </div>  
+                    <div className="col-2"> 
+                      <i className="fas fa-times" onClick={() => this.closeModal()}></i>
+                    </div>
+                    </div>
+                      <hr></hr>
+                      <p>Are you sure you want to delete vacation </p>
+                      <p> to {this.props.location} on dates: </p>
+                      <p>from {this.props.dateFrom} to {this.props.dateTo}?</p>
+                      <hr></hr>
+                      <div className="row">
+  <div className="col-6">
+  <a className="button btn but" onClick={() =>this.handleClick(this.props.idVac)} href="/HomeAdmin">Delete</a>
+  </div>
+  <div className="col-6">
+  <a className="button btn but" onClick={() => this.closeModal()} href="/HomeAdmin">Cancel</a>
+  </div>
+</div>
+                     
+                    </div>
+                </Modal>
+            </section>
+
+    </div>
+     
+    
             ); 
 }
 }

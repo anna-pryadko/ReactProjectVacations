@@ -74,7 +74,7 @@ class HomeAdmin extends Component {
 		
 		<h1>OUR VACATIONS</h1>
 
-        <div className="row">
+        <div className="row boxCards">
 			{this.printCardsAdm()}
         </div>    
 		      

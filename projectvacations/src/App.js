@@ -11,6 +11,7 @@ import Charts from './Components/Charts/Charts';
 //import Login from './Components/Login/Login';
 import ModalLogin from './Components/ModalLogin/ModalLogin';
 import Registration from './Components/Registration/Registration.js';
+import AddModal from './Components/AddVacation/AddVacation';
 
 class App  extends Component {
   render() {
@@ -26,6 +27,7 @@ class App  extends Component {
                 <Route path="/Charts" exact component={Charts} />
                 <Route path="/Login" exact component={ModalLogin} />
                 <Route path="/Registration" exact component={Registration} />
+                <Route path="/AddVacation" exact component={AddModal} />
         </Switch>
        
       </BrowserRouter>
